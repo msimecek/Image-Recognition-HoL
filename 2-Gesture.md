@@ -4,7 +4,7 @@ In this part our API is going to expand with another capability: to recognize ge
 
 This is the result:
 
-![](../Images/2-1-final.png)
+![](Images/2-1-final.png)
 
 We will use [Custom Vision API](https://azure.microsoft.com/en-us/services/cognitive-services/custom-vision-service/) and ASP.NET Core 2.0.
 
@@ -12,7 +12,7 @@ We will use [Custom Vision API](https://azure.microsoft.com/en-us/services/cogni
 
 As is common with machine learning, there are two main steps in the process of understanding gestures: training & recognition.
 
-![](../Images/2-0-gesture-recognition.png)
+![](Images/2-0-gesture-recognition.png)
 
 ## Preparing the model
 
@@ -26,25 +26,25 @@ Unlike Part 1 we will work with a web-based portal this time.
 
 Now go ahead and create two new tags: **Yes** and **No**. They will represent the Thumbs up and down gestures . You can of course call them however you like, I chose this for simplicity.
 
-![](../Images/2-2-new-tag.png)
+![](Images/2-2-new-tag.png)
 
 
 
-![](../Images/2-3-yesno.png)
+![](Images/2-3-yesno.png)
 
 To train the model and make it tag pictures correctly, you will need **at least 30 images per tag**. It's up to you how you take them - use the camera built into your computer, use your phone... Whatever you prefer to get images that show gestures.
 
 > When taking pictures, try different angles, positions and lighting conditions.
 
-![](../Images/2-4-add-images.png)
+![](Images/2-4-add-images.png)
 
 Tag each group appropriately.
 
-![](../Images/2-5-tagging.png)
+![](Images/2-5-tagging.png)
 
 Once you're done uploading and tagging, click the green **Train** button at the top:
 
-![](../Images/2-6-train.png)
+![](Images/2-6-train.png)
 
 After the training, you'll get results for the first iteration. It gives you two numbers:
 
@@ -53,25 +53,25 @@ After the training, you'll get results for the first iteration. It gives you two
 
 My numbers aren't bad, but not amazing:
 
-![](../Images/2-7-iteration1.png)
+![](Images/2-7-iteration1.png)
 
 You can try quick test now. Take another picture with your camera and upload it to the Quick Test blade.
 
-![](../Images/2-8-quicktest-button.png)
+![](Images/2-8-quicktest-button.png)
 
-![](../Images/2-9-quicktest-result.png)
+![](Images/2-9-quicktest-result.png)
 
 Feel free to experiment a little more - upload more training images, train another iteration, test it etc. You should see the precision increasing with the number of images you upload.
 
 Mark whichever iteration you choose as default by clicking the **Make default** button.
 
-![](../Images/2-10-make-default.png)
+![](Images/2-10-make-default.png)
 
 Finally, we will need a URL to call and a key to authenticate with. As you may have guessed, this information can be found under the **Prediction URL** button.
 
 The value we want for our case is the second one - image file. Copy the URL and key somewhere you'll be able to find it later.
 
-![](../Images/2-11-prediction-url.png)
+![](Images/2-11-prediction-url.png)
 
 ## Using the model
 
@@ -157,7 +157,7 @@ Switch to C#, change Top-level type to **PredictionResult** and paste JSON into 
 
 Then change Generated namespace to **API.Models**.
 
-![](../Images/2-12-json-csharp.png)
+![](Images/2-12-json-csharp.png)
 
 Then:
 
@@ -206,7 +206,7 @@ private Prediction GetTopPrediction(PredictionResult predictionResult)
 
 If you're new to .NET you may not know how to resolve missing references. They are represented as compile errors by red squiggly lines under parts of your code. Resolving them is usually very easy: place cursor to an underlined word, press `Ctrl + .` and select *using ...*.
 
-![](../Images/1-6-squiggly.png)
+![](Images/1-6-squiggly.png)
 
 This will add the required using statement to the top of the file. Repeat this for any other red lines. If the *using* doesn't show up it's probably because of a syntax error.
 
@@ -236,7 +236,7 @@ public async Task<ActionResult> Post([FromBody] string imageFile)
 
 Run the API by pressing **F5**, browse to the frontend site and take a picture!
 
-![](../Images/2-13-finish.png)
+![](Images/2-13-finish.png)
 
 ## Optional work
 

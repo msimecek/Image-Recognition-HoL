@@ -15,23 +15,23 @@ Like with any other cloud API, you have to obtain a key which will allow you to 
 
 1. Go to https://azure.microsoft.com/en-us/services/cognitive-services/ and click **Try Cognitive Service for free**.
 
-   ![](../Images/1-try-cognitive.png)
+   ![](Images/1-try-cognitive.png)
 
 2. In the **Select your API** section pick **Face API** by clicking the **Get API Key** button.
 
-   ![](../Images/2-get-face-api.png)
+   ![](Images/2-get-face-api.png)
 
 3. Agree to the terms.
 
-   ![](../Images/3-agree.png)
+   ![](Images/3-agree.png)
 
 4. If not signed-in already, login with your account of choice.
 
-   ![](../Images/4-sign-in.png)
+   ![](Images/4-sign-in.png)
 
 5. And finally get your key.
 
-   ![](../Images/5-get-key.png)
+   ![](Images/5-get-key.png)
 
 **Copy both keys** somewhere you will find them and take also the **Endpoint** value.
 
@@ -59,11 +59,11 @@ http-server
 
 We're using the [http-server library](https://www.npmjs.com/package/http-server) to quickly host static web files on localhost.
 
-![](../Images/1-1-http-server.png)
+![](Images/1-1-http-server.png)
 
 Now visit http://localhost:8080 with your browser.
 
-![](../Images/1-2-running-frontend.png)
+![](Images/1-2-running-frontend.png)
 
 ## Create backend
 
@@ -77,7 +77,7 @@ As you can see at the front-end page, teaching computers to recognize certain pe
 
 Visual Studio will ask if you want to add required assets. Click **Yes**, becuase it will allow you to build and debug directly from VS Code.
 
-![](../Images/1-3-required-assets.png)
+![](Images/1-3-required-assets.png)
 
 The project structure is quite simple.
 
@@ -118,7 +118,7 @@ First you have to teach the model which people you want to recognize.
 3. Add faces to this person.
 4. Train the group.
 
-![](../Images/1-4-face-groups.png)
+![](Images/1-4-face-groups.png)
 
 Then you can send new faces and ask "who is this?"
 
@@ -126,7 +126,7 @@ Then you can send new faces and ask "who is this?"
 2. If face detected, send it to the Identify API.
 3. Profit...
 
-![](../Images/1-5-identification.png)
+![](Images/1-5-identification.png)
 
 Translated to the language of REST:
 
@@ -177,7 +177,7 @@ public async Task<ActionResult> CreateGroup([FromBody]string groupId)
 
 If you're new to .NET you may be worried by the red squiggly lines under parts of this code. This means that there is a syntax error, in this case missing reference to libraries. The fix is very easy: place cursor to an underlined word, press `Ctrl + .` and select *using ...*.
 
-![](../Images/1-6-squiggly.png)
+![](Images/1-6-squiggly.png)
 
 This will add the required using statement to the top of the file. Repeat this for any other red lines. If the *using* doesn't show up it's probably because of a syntax error.
 
@@ -191,7 +191,7 @@ Let's test our API now.
 
 3. Issue a **POST** request to `http://localhost:5000/api/group` with **Body** of `"customers"` and type `application/json`.
 
-   ![](../Images/1-7-post-customers.png)
+   ![](Images/1-7-post-customers.png)
 
 4. The API should return status *201 Created* and body of "customers".
 
@@ -394,4 +394,4 @@ In the current setup our frontend site is not allowed to communicate with backen
 
 You try the face identification now, but remember to call the `/api/group/customers/train` endpoint every time after you add new faces!
 
-![](../Images/1-8-identification.png)
+![](Images/1-8-identification.png)

@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Face Identification</title>
+    <meta charset='utf-8'>
+    <link rel="stylesheet" href="main.css" type="text/css" media="all">
+    <script src="capture.js">
+
+    </script>
+</head>
+
+<body>
+    <div class="contentarea">
+        <h1>
+            Face Identification
+        </h1>
+        <p>
+            Face identification is a 4-step process.
+        </p>
+
+        <h2>1. Create a Person Group</h2>
+        <i>Call POST to /api/group and type your group's name here.</i>
+        <p>Person group: <input id="groupId" type="text"/></p>
+
+        <h2>2. Create a Person</h2>
+        <i>Call POST to /api/group/[your group id]/person and copy the generated ID here.</i>
+        <p>Person ID: <input id="personId" type="text" /></p>
+
+        <h2>3. Add Face to the Person</h2>
+        <i>Add some faces to your newly created person. Use the <b>Add face</b> button below.</i>
+
+        <h2>4. Train the group</h2>
+        <p>The person group needs to be trained before it will recognize new person.</p>
+        <i>Call POST to /api/group/[your group id]/train to initiate training. It will take just a few seconds.</i>
+
+        <hr />
+
+        <div class="camera">
+            <video id="video">Video stream not available.</video>
+            <button id="addFaceButton">Add face</button>
+            <button id="identifyButton">Identify</button>
+        </div>
+        <canvas id="canvas">
+        </canvas>
+        <div class="output">
+            <img id="photo" alt="The screen capture will appear in this box.">
+        </div>
+
+        <div id="response"></div>
+
+        <footer style="margin-top: 60px">
+            This code is based on the MDN <i>Still photo capture example</i> described here: <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos"> Taking still photos with WebRTC</a>.
+        </footer>
+    </div>
+</body>
+
+</html>

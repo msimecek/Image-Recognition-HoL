@@ -1,12 +1,16 @@
 # Part 1 - Identify a Customer
 
-In the first exercise, we're going to use the Cognitive Services Face API to identify the person who is standing in front of the camera. Practical application of this could be in a retail store when the.....
+In the first exercise, we're going to use the [Cognitive Services Face API](https://azure.microsoft.com/en-us/services/cognitive-services/face/) to identify the person who is standing in front of the camera. Practical application of this could be in a retail store when the shopping assistant would get a notification about particular customer and could offer them someting special.
 
+## Final state
 
+At the end of this part, we'll have web frontend calling ASP.NET Core API which will response with name of the person who is on a picture.
+
+![](Images/1-9-final.png)
 
 ## Get a key
 
-Like with any other cloud API, you have to obtain a key which will allow you to call it. 
+Face recognition will be enabled by the Face API and like with any other cloud API, you have to obtain a key which will allow you to call it. 
 
 - If you already have an *Azure Subscription*, you can add a new resource from the Cognitive Services family and select **Face API**.
 - If not, there's a free tier you can try without registering for Azure.
@@ -39,17 +43,17 @@ Note that you have 30 days to use this free key.
 
 ## Prepare front-end
 
-Create a folder on your hard drive for this workshop and clone the repo into it.
+Create a folder on your hard drive for this workshop and clone this repo into it:
 
 ```
-git clone TODO XXX
+git clone https://github.com/msimecek/Image-Recognition-HoL.git
 ```
 
-> In this repo you will find an empty folder called **\_Work**. As its name suggests it's purpose is to host everything you create as part of this workshop. But if you prefer to keep your source code somewhere else, no problem at all.
+> In this repo you will find an empty folder called **\_Work**. As its name suggests it's purpose is to host files you create as part of this workshop. But if you prefer to keep your source code somewhere else, no problem at all.
 
-Go to **Source** folder and **copy FaceFrontend to _Work**.
+Go to **\_Source** folder and copy **FaceFrontend** to **_Work**.
 
-If you open the front-end page now, it will attempt to initialize your camera a start a video feed. Depending on your browser this may not work - either the browser doesn't support HTML5 camera access (then use another one), or the browser doesn't allow file:/// to get access to the camera. Either way, let's serve our site on localhost first.
+If you open the front-end page now, it will attempt to initialize your camera a start a video feed. Depending on your browser this may not work - either the browser doesn't support HTML5 camera access (then use another one), or the browser doesn't allow `file:///` to access the camera. Let's serve our site on localhost first.
 
 ```
 npm install http-server -g
@@ -61,7 +65,7 @@ We're using the [http-server library](https://www.npmjs.com/package/http-server)
 
 ![](Images/1-1-http-server.png)
 
-Now visit http://localhost:8080 with your browser.
+Now visit http://localhost:8080 with your web browser.
 
 ![](Images/1-2-running-frontend.png)
 
@@ -81,7 +85,7 @@ Visual Studio will ask if you want to add required assets. Click **Yes**, becuas
 
 The project structure is quite simple.
 
-* **Program.cs** is where the app is started. It's basically a Console application and we're telling it to use WebHost.
+* **Program.cs** is where the app is started. It's basically a Console application, but we're telling it to use WebHost (therefore making it a web application).
 * **Startup.cs** is where the app is initialized. You specify "middlewares" (such as MVC) through which will every request go.
 * **Controllers/ValuesController.cs** is a sample API controller that demonstrates how to respond to REST requests. We will ignore it completely.
 * We will also ignore .vscode, bin and obj folders.

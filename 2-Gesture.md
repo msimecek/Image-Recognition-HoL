@@ -75,7 +75,7 @@ The value we want for our case is the second one - image file. Copy the URL and 
 
 ## Using the model
 
-Now with the model ready, we can start calling it and getting predictions. We are going to continue our work on the API from [TODO: Part 1]() and add more functionality to it.
+Now with the model ready, we can start calling it and getting predictions. We are going to continue our work on the API from [Part 1](1-Face.md) and add more functionality to it.
 
 > If you didn't go through Part 1, you will find the source code in _Source/\_Done/Part1.
 

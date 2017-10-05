@@ -19,5 +19,5 @@ Technically, we'll use **ASP.NET Core** and **Microsoft Cognitive Services**, sp
 ## Exercises
 
 * [0 - Preparation](0-Prep.md)
-* [1- Face API](1-Face.md) - identify customer
+* [1 - Face API](1-Face.md) - identify customer
 * [2 - Custom Vision](2-Gesture.md) - recognize gesture

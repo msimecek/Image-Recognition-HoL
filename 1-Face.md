@@ -73,7 +73,7 @@ Now visit http://localhost:8080 with your web browser.
 
 As you can see at the front-end page, teaching computers to recognize certain people is a four step process that involves calling various API endpoints. Let's build those now!
 
-1. Navigate to the **\_Work** folder.
+1. Using the command line navigate to the **\_Work** folder.
 2. Run `dotnet new` and see what options are available.
 3. Run `dotnet new webapi -n OSAPI`.
 4. `cd OSAPI`

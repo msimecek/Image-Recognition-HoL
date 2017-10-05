@@ -75,7 +75,7 @@ As you can see at the front-end page, teaching computers to recognize certain pe
 
 1. Using the command line navigate to the **\_Work** folder.
 2. Run `dotnet new` and see what options are available.
-3. Run `dotnet new webapi -n OSAPI`.
+3. Run `dotnet new webapi -n OSAPI`
 4. `cd OSAPI`
 5. Run Visual Studio Code: `code .` (with the dot).
 
@@ -203,7 +203,7 @@ Let's test our API now.
 
 6. The API should return status *400 Bad Request* with an error message.
 
-Next step is to create a person in a group. Let's add another method to the **PersonController**:
+Next step is to create a person in a group. Let's add another method to the **PersonController** class:
 
 ```c#
 [Route("api/group/{groupId}/person")]
@@ -229,7 +229,7 @@ CreatePerson expects group ID in the URL and person's name in body.
 
 1. Press **F5** and run the API again.
 2. In **Postman** send a new POST request to `http://localhost:5000/api/group/customers/person` with body of type **application/json** and content your name (e.g. `"Martin"`).
-3. The API should return status *201 Created* and new person's ID in the body.
+3. The API should return status *201 Created* and new person's ID in the body. **Copy this GUID and store it somewhere.**
 
 The last step before training is to add person's faces to the collection. For that we'll create another method in our API.
 

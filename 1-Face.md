@@ -150,7 +150,7 @@ dotnet add package Microsoft.ProjectOxford.Face.DotNetCore
 
 Go back to VS Code and open the **PersonController.cs** file.
 
-Add two constants with information you copied at the beginning:
+Add two constants with information you copied at the beginning into the **PersonController** class:
 
 ```c#
 private const string _faceApiKey = "b66aaaacccccasaa8888887ae88b38";

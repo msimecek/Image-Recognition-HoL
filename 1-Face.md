@@ -37,7 +37,7 @@ Face recognition will be enabled by the Face API and like with any other cloud A
 
    ![](Images/5-get-key.png)
 
-**Copy both keys** somewhere you will find them and take also the **Endpoint** value.
+**Copy** the **Endpoint** and **Key 1** and store them somewhere you will find them later.
 
 Note that you have 30 days to use this free key.
 
@@ -53,7 +53,7 @@ git clone https://github.com/msimecek/Image-Recognition-HoL.git
 
 Go to **\_Source** folder and copy **FaceFrontend** to **_Work**.
 
-If you open the front-end page now, it will attempt to initialize your camera a start a video feed. Depending on your browser this may not work - either the browser doesn't support HTML5 camera access (then use another one), or the browser doesn't allow `file:///` to access the camera. Let's serve our site on localhost first.
+If you open the front-end page now, it will attempt to initialize your camera a start a video feed. Depending on your browser this may not work - either the browser doesn't support HTML5 camera access (then use another one), or the browser doesn't allow `file:///` to access the camera. These commands will run local HTTP server in a directory of your choice:
 
 ```
 npm install http-server -g
@@ -69,17 +69,48 @@ Now visit http://localhost:8080 with your web browser.
 
 ![](Images/1-2-running-frontend.png)
 
+## Face API
+
+Let's take a little break now, before we start building our API, to understand the process of people identification.
+
+First you have to teach the model which people you want to recognize.
+
+1. Create a person group.
+2. Add new person to this group.
+3. Add faces to this person.
+4. Train the group.
+
+![](Images/1-4-face-groups.png)
+
+Then you can send new faces and ask "who is this?"
+
+1. Send an image to the Detect API.
+2. If face detected, send it to the Identify API.
+3. Profit...
+
+![](Images/1-5-identification.png)
+
+Translated to the language of REST:
+
+* `/api/group`
+* `/api/group/[id]/person`
+* `/api/group/[id]/person/[id]/faces`
+* `/api/group/[id]/train`
+* `/api/group/[id]/identify`
+
 ## Create backend
 
-As you can see at the front-end page, teaching computers to recognize certain people is a four step process that involves calling various API endpoints. Let's build those now!
+Let's implement the API described above!
 
-1. Using the command line navigate to the **\_Work** folder.
+1. Using the **console** (CMD, Bash, Terminal...) navigate to the **\_Work** folder.
 2. Run `dotnet new` and see what options are available.
 3. Run `dotnet new webapi -n OSAPI`
 4. `cd OSAPI`
-5. Run Visual Studio Code: `code .` (with the dot).
+5. Run Visual Studio Code: `code .` (including the dot).
 
-Visual Studio will ask if you want to add required assets. Click **Yes**, becuase it will allow you to build and debug directly from VS Code.
+> **Note**: You can use the same source code with Visual Studio 2017 as well. Just the specific steps will be different in Visual Studio Code.
+
+Visual Studio Code will ask if you want to add required assets. Click **Yes**, becuase it will allow you to build and debug directly from VS Code.
 
 ![](Images/1-3-required-assets.png)
 
@@ -111,38 +142,9 @@ namespace OSAPI
 }
 ```
 
-## Face API
-
-Let's take a little break now, before we start building our API, to understand the process of people identification.
-
-First you have to teach the model which people you want to recognize.
-
-1. Create a person group.
-2. Add new person to this group.
-3. Add faces to this person.
-4. Train the group.
-
-![](Images/1-4-face-groups.png)
-
-Then you can send new faces and ask "who is this?"
-
-1. Send an image to the Detect API.
-2. If face detected, send it to the Identify API.
-3. Profit...
-
-![](Images/1-5-identification.png)
-
-Translated to the language of REST:
-
-* `/api/group`
-* `/api/group/[id]/person`
-* `/api/group/[id]/person/[id]/faces`
-* `/api/group/[id]/train`
-* `/api/group/[id]/identify`
-
 ## APIs for new faces
 
-Install the **Face API NuGet package** for .NET Core:
+Install the **Face API NuGet package** for .NET Core by running this command in the **OSAPI** folder:
 
 ```
 dotnet add package Microsoft.ProjectOxford.Face.DotNetCore
@@ -150,16 +152,21 @@ dotnet add package Microsoft.ProjectOxford.Face.DotNetCore
 
 Go back to VS Code and open the **PersonController.cs** file.
 
-Add two constants with information you copied at the beginning into the **PersonController** class:
+Add two constants with information you copied at the beginning (Face API *Key 1* & *Endpoint*) into the **PersonController** class:
 
 ```c#
-private const string _faceApiKey = "b66aaaacccccasaa8888887ae88b38";
-private const string _faceApiEndpoint = "https://westeurope.api.cognitive.microsoft.com/face/v1.0";
+public class PersonController : Controller
+{
+   private const string _faceApiKey = "b66aaaacccccasaa8888887ae88b38";
+   private const string _faceApiEndpoint = "https://westeurope.api.cognitive.microsoft.com/face/v1.0";
+   ...
 ```
 
-Add new method to the **PersonController** class which will create a new Person Group with ID of your choice:
+Under these constants add new method to the **PersonController** class which will create a new Person Group with ID of your choice:
 
 ```c#
+...
+  
 [Route("api/group")]
 [HttpPost]
 public async Task<ActionResult> CreateGroup([FromBody]string groupId)
@@ -193,17 +200,17 @@ Let's test our API now.
 
 2. Run **Postman**.
 
-3. Issue a **POST** request to `http://localhost:5000/api/group` with **Body** of `"customers"` and type `application/json`.
+3. Issue a **POST** request to `http://localhost:5000/api/group` with **Body** of `"customers"` and type **raw** + `application/json`.
 
    ![](Images/1-7-post-customers.png)
 
-4. The API should return status *201 Created* and body of "customers".
+4. The API should return status *201 Created* and body of "*customers*".
 
 5. Try to POST a name which is not allowed by the API. Such as "*our customers*".
 
 6. The API should return status *400 Bad Request* with an error message.
 
-Next step is to create a person in a group. Let's add another method to the **PersonController** class:
+Next step is to create a person in a group. Let's add another method to the **PersonController** class, just under the previous one:
 
 ```c#
 [Route("api/group/{groupId}/person")]
@@ -228,10 +235,10 @@ public async Task<ActionResult> CreatePerson([FromBody]string name, string group
 CreatePerson expects group ID in the URL and person's name in body.
 
 1. Press **F5** and run the API again.
-2. In **Postman** send a new POST request to `http://localhost:5000/api/group/customers/person` with body of type **application/json** and content your name (e.g. `"Martin"`).
+2. In **Postman** send a new POST request to `http://localhost:5000/api/group/customers/person` with body of type **application/json** and content of your name (e.g. `"Martin"` - including quotes).
 3. The API should return status *201 Created* and new person's ID in the body. **Copy this GUID and store it somewhere.**
 
-The last step before training is to add person's faces to the collection. For that we'll create another method in our API.
+The last step before training is to add person's faces to the collection. For that we'll create yet another method in our API.
 
 ```c#
 [Route("api/group/{groupId}/person/{personId}/faces")]
@@ -253,11 +260,11 @@ public async Task<ActionResult> AddPersonFace([FromBody]string imageFile, string
 }
 ```
 
-There's one red error we cannot resolve just by adding using to some library. The "Images" class does not exist yet and we will create it now.
+There's one red error we cannot resolve just by adding using to some library. The `Images` class does not exist yet and we will create it now.
 
-1. Create new folder in the project, call it **Utils**.
+1. In Visual Studio Code create new folder in the project, call it **Utils**.
 2. Add new file to it, call it **Images.cs**.
-3. Code it's contents:
+3. Code its content:
 
 ```c#
 using System.IO;
@@ -283,7 +290,7 @@ We will use the only static method to decode a photo from Base64 format (used by
 
 You should be able to resolve the red squiggle in PersonController now.
 
-Then finally add the training method.
+Then finally add the training method to **PersonController** class.
 
 ```c#
 [Route("api/group/{groupId}/train")]
@@ -299,7 +306,7 @@ public async Task<ActionResult> TrainGroup(string groupId)
 }
 ```
 
-And again - run with **F5** and call it from **Postman**.
+And finally - run with **F5** and call it from **Postman**.
 
 `POST http://localhost:5000/api/group/customers/train`
 
@@ -312,6 +319,8 @@ With our person in place, faces added and group trained we can finally start ide
 3. Get person details based on identification.
 
 At the end, we're interested in the person's name, so that we can display it.
+
+Still in the **PersonController**, add this method under the TrainGroup method:
 
 ```c#
 [Route("api/group/{groupId}/identify")]
@@ -348,9 +357,9 @@ All done for now. Let's test it all together!
 
 ## Testing the app
 
-1. Go to **FaceFrontend** and start it: `http-server`.
+1. Using the console, navigate to **FaceFrontend** folder and start local server: `http-server`.
 2. Press **F5** in Visual Studio Code to run the API.
-3. Navigate to http://localhost:8080 with your browser.
+3. In your web browser navigate to http://localhost:8080 .
 4. Enter the name of your person group to the first field.
 5. Enter the person ID to the second field.
 6. Click **Add face**.

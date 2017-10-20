@@ -19,8 +19,9 @@
     var video = null;
     var canvas = null;
     var photo = null;
-    var addFaceButton = null;
-    var identifyButton = null;
+    
+    var groupIdInput = null;
+    var personIdInput = null;
 
     var capturedImage = null;
 
@@ -28,9 +29,14 @@
         video = document.getElementById('video');
         canvas = document.getElementById('canvas');
         photo = document.getElementById('photo');
-        addFaceButton = document.getElementById('addFaceButton');
-        identifyButton = document.getElementById('identifyButton');
+        
+        groupIdInput = document.getElementById('groupId');
+        personIdInput = document.getElementById('personId');
 
+        groupIdInput.value = getCookie("groupId");
+        personIdInput.value = getCookie("personId");
+
+        // Camera capture related stuff
         navigator.getMedia = (navigator.getUserMedia ||
             navigator.webkitGetUserMedia ||
             navigator.mozGetUserMedia ||
@@ -74,13 +80,18 @@
             }
         }, false);
 
-        addFaceButton.addEventListener('click', function (ev) {
+        // Click handlers
+        document.getElementById('createGroupButton').addEventListener('click', createGroup);
+        document.getElementById('createPersonButton').addEventListener('click', createPerson);
+        document.getElementById('trainButton').addEventListener('click', trainGroup);
+
+        document.getElementById('addFaceButton').addEventListener('click', function (ev) {
             takepicture();
             addFace();
             ev.preventDefault();
         }, false);
 
-        identifyButton.addEventListener('click', function (ev) {
+        document.getElementById('identifyButton').addEventListener('click', function (ev) {
             takepicture();
             identifyFace();
             ev.preventDefault();
@@ -122,6 +133,61 @@
         }
     }
 
+    function createGroup() {
+        var groupId = groupIdInput.value;
+        if (groupId === "") {
+            alert("Please provide the group name.");
+            return;
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                document.cookie = "groupId=" + groupId;
+            }
+        };
+
+        xhttp.open("POST", "http://localhost:5000/api/group/", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send('"' + groupId + '"');
+    }
+
+    function createPerson() {
+        var personName = document.getElementById("personName").value;
+        var groupId = groupIdInput.value;
+
+        if (personName === "" || groupId === "") {
+            alert("Please provide both Group ID and Person Name.");
+            return;
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                var personId = this.responseText.replace(/"/g, '');
+                document.cookie = "personId=" + personId;
+                personIdInput.value = personId;
+            }
+        };
+
+        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/person", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.send('"' + personName + '"');
+    }
+
+
+    function trainGroup() {
+        var groupId = groupIdInput.value;
+        if (groupId === "") {
+            alert("Please fill in the group name.");
+            return;
+        }
+
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/train", true);
+        xhttp.send();
+    }
+
     function addFace() {
         var groupId = document.getElementById("groupId").value;
         var personId = document.getElementById("personId").value;
@@ -129,7 +195,7 @@
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4) {
-                document.getElementById("response").innerHTML = this.responseText;
+                document.getElementById("response").innerHTML = this.responseText; // Face ID
             }
         };
 
@@ -157,3 +223,19 @@
     // once loading is complete.
     window.addEventListener('load', startup, false);
 })();
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}

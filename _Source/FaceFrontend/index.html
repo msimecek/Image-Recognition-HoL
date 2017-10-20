@@ -20,26 +20,20 @@
         </p>
 
         <h2>1. Create a Person Group</h2>
-        <i>Call POST to /api/group and type your group's name here.</i>
-        <p>Person group: <input id="groupId" type="text"/></p>
+        <p><i>Call POST to <code>/api/group</code> and with your group's <b>ID</b> in the request body.</i></p>
+        <p>Person group ID: <input id="groupId" type="text"/> <button id="createGroupButton">Create Group</button></p>
 
         <h2>2. Create a Person</h2>
-        <i>Call POST to /api/group/[your group id]/person and copy the generated ID here.</i>
+        <p><i>Call POST to <code>/api/group/[your group id]/person</code> and use the generated <b>GUID</b> here as Person ID.</i></p>
+        <p>Person name: <input id="personName" type="text" /> <button id="createPersonButton">Create Person</button></p>
         <p>Person ID: <input id="personId" type="text" /></p>
 
         <h2>3. Add Face to the Person</h2>
-        <i>Add some faces to your newly created person. Use the <b>Add face</b> button below.</i>
-
-        <h2>4. Train the group</h2>
-        <p>The person group needs to be trained before it will recognize new person.</p>
-        <i>Call POST to /api/group/[your group id]/train to initiate training. It will take just a few seconds.</i>
-
-        <hr />
-
+        <p><i>Add some faces to your newly created person. Use the <b>Add face</b> button below.</i></p>
+        
         <div class="camera">
             <video id="video">Video stream not available.</video>
             <button id="addFaceButton">Add face</button>
-            <button id="identifyButton">Identify</button>
         </div>
         <canvas id="canvas">
         </canvas>
@@ -47,6 +41,18 @@
             <img id="photo" alt="The screen capture will appear in this box.">
             <div id="response"></div>
         </div>        
+        
+        <h2>4. Train the group</h2>
+        <p>The person group needs to be trained before it will recognize new person.</p>
+        <p><i>Call POST to <code>/api/group/[your group name]/train</code> to initiate training. It will take just a few seconds.</i></p>
+        <p><button id="trainButton">Train</button></p>
+
+        <h2>5. Identify the person</h2>
+        <p>After training, the group is ready to recognize new faces.</p>
+        <p><i>Call POST with image to <code>/api/group/[your group name]/identify</code></i></p>
+        <p><button id="identifyButton">Identify</button></p>
+
+        <hr />
 
         <footer style="margin-top: 60px">
             This code is based on the MDN <i>Still photo capture example</i> described here: <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos"> Taking still photos with WebRTC</a>.

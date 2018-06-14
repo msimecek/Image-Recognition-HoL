@@ -24,6 +24,8 @@
     var personIdInput = null;
 
     var capturedImage = null;
+    
+    const apiRoot = "https://mdevcampws.azurewebsites.net/api";
 
     function startup() {
         video = document.getElementById('video');
@@ -147,7 +149,7 @@
             }
         };
 
-        xhttp.open("POST", "http://localhost:5000/api/group/", true);
+        xhttp.open("POST", apiRoot + "/group/", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send('"' + groupId + '"');
     }
@@ -170,7 +172,7 @@
             }
         };
 
-        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/person", true);
+        xhttp.open("POST", apiRoot + "/group/" + groupId + "/person", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send('"' + personName + '"');
     }
@@ -184,7 +186,7 @@
         }
 
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/train", true);
+        xhttp.open("POST", apiRoot + "/api/group/" + groupId + "/train", true);
         xhttp.send();
     }
 
@@ -199,7 +201,7 @@
             }
         };
 
-        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/person/" + personId + "/faces", true);
+        xhttp.open("POST", apiRoot + "/api/group/" + groupId + "/person/" + personId + "/faces", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send('"' + capturedImage + '"');
     }
@@ -214,7 +216,7 @@
             }
         };
 
-        xhttp.open("POST", "http://localhost:5000/api/group/" + groupId + "/identify", true);
+        xhttp.open("POST", apiRoot + "/api/group/" + groupId + "/identify", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.send('"' + capturedImage + '"');
     }
